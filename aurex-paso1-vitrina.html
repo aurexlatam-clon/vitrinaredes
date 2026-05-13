@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AUREX Academy — Tu Perfil es tu Vendedor</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0A0A0A; --gold:#D4A843; --gold-light:#E8C06A;
+    --gold-dim:rgba(212,168,67,0.15); --gold-glow:rgba(212,168,67,0.07);
+    --white:#F5F5F0; --gray:#888880; --text:#D0CFC8;
+    --cyan:#00C9B1; --rose:#FF6B6B; --violet:#9B6DFF;
+    --orange:#FF8C42; --green:#4CAF82; --max:600px;
+    --wa:#25D366; --wa-dark:#128C7E; --ig-grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+    --fb:#1877F2;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;font-size:16px;line-height:1.75;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(212,168,67,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,67,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+  .progress-strip{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));z-index:100;box-shadow:0 0 8px rgba(212,168,67,0.6);transition:width 0.1s ease;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+
+  /* HERO */
+  .hero{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding:72px 24px 56px;text-align:center;}
+  .module-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gold-dim);border:1px solid rgba(212,168,67,0.3);border-radius:100px;padding:6px 16px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:28px;animation:fadeUp 0.8s ease both;}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:blink 2s ease infinite;}
+  .step-indicator{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;animation:fadeUp 0.8s ease 0.05s both;}
+  .step-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);}
+  .step-dot.active{background:var(--gold);box-shadow:0 0 8px rgba(212,168,67,0.6);}
+  .hero-title{font-family:'Syne',sans-serif;font-size:clamp(32px,9vw,48px);font-weight:800;line-height:1.05;color:var(--white);margin-bottom:10px;animation:fadeUp 0.8s ease 0.1s both;}
+  .hero-title span{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-light) 60%,#F5D78E 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .hero-sub{font-size:13px;font-weight:300;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:28px;animation:fadeUp 0.8s ease 0.2s both;}
+  .hero-hook{background:linear-gradient(135deg,rgba(212,168,67,0.1),rgba(212,168,67,0.04));border:1px solid rgba(212,168,67,0.25);border-left:3px solid var(--gold);border-radius:14px;padding:20px 24px;font-size:15px;color:var(--white);text-align:left;line-height:1.7;margin-bottom:32px;animation:fadeUp 0.8s ease 0.3s both;}
+  .hero-hook strong{color:var(--gold);}
+
+  /* NAV */
+  .nav-map{position:relative;z-index:1;max-width:var(--max);margin:0 auto 48px;padding:0 20px;}
+  .nav-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gray);margin-bottom:14px;text-align:center;}
+  .nav-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .nav-chip{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:7px 16px;font-size:12px;font-family:'Syne',sans-serif;color:var(--gray);cursor:pointer;text-decoration:none;transition:all 0.25s ease;}
+  .nav-chip:hover{background:var(--gold-dim);border-color:rgba(212,168,67,0.4);color:var(--gold);transform:translateY(-1px);}
+
+  /* MAIN */
+  .main{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding:0 20px 80px;}
+  .section-block{margin-bottom:64px;}
+  .section-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .section-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+  .section-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);line-height:1.2;}
+  .section-subtitle{font-size:12px;color:var(--gray);font-family:'Syne',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+  .sec-wa .section-icon{background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);}
+  .sec-ig .section-icon{background:rgba(220,39,67,0.1);border:1px solid rgba(220,39,67,0.25);}
+  .sec-fb .section-icon{background:rgba(24,119,242,0.1);border:1px solid rgba(24,119,242,0.25);}
+  .sec-errores .section-icon{background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.25);}
+  .sec-check .section-icon{background:rgba(155,109,255,0.1);border:1px solid rgba(155,109,255,0.25);}
+  .intro-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px 22px;margin-bottom:28px;font-size:14.5px;color:var(--text);line-height:1.8;}
+  .intro-card strong{color:var(--white);}
+  .intro-card em{color:var(--gold);font-style:normal;font-weight:700;}
+
+  /* ═══════════════════════════
+     PHONE MOCKUPS — HIPERREALISTAS
+  ═══════════════════════════ */
+  .mockup-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px;}
+  .mockup-col{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .mockup-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:100px;text-align:center;}
+  .mockup-label.good{background:rgba(76,175,130,0.15);color:var(--green);border:1px solid rgba(76,175,130,0.3);}
+  .mockup-label.bad{background:rgba(255,107,107,0.1);color:var(--rose);border:1px solid rgba(255,107,107,0.3);}
+
+  /* Phone frame */
+  .phone{
+    width:150px;
+    background:linear-gradient(170deg,#222224 0%,#18181A 40%,#111113 100%);
+    border-radius:34px;
+    padding:8px 5px 12px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08) inset,
+      0 0 0 2px #0A0A0A,
+      0 0 0 3px rgba(255,255,255,0.04),
+      0 32px 64px rgba(0,0,0,0.8),
+      0 8px 16px rgba(0,0,0,0.5);
+    position:relative;
+  }
+  /* Dynamic island / notch */
+  .phone-notch{
+    width:52px;height:6px;
+    background:#0A0A0A;border-radius:4px;
+    margin:0 auto 6px;
+    position:relative;
+  }
+  .phone-notch::after{
+    content:'';position:absolute;
+    right:10px;top:50%;transform:translateY(-50%);
+    width:4px;height:4px;border-radius:50%;
+    background:#1A1A1A;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.1);
+  }
+  /* Screen */
+  .phone-screen{
+    border-radius:26px;overflow:hidden;
+    background:#000;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  /* Side buttons */
+  .phone::before{
+    content:'';position:absolute;
+    left:-3px;top:72px;
+    width:3px;height:22px;
+    background:#1C1C1E;border-radius:2px 0 0 2px;
+    box-shadow:0 28px 0 #1C1C1E,0 52px 0 #1C1C1E;
+  }
+  .phone::after{
+    content:'';position:absolute;
+    right:-3px;top:88px;
+    width:3px;height:36px;
+    background:#1C1C1E;border-radius:0 2px 2px 0;
+  }
+
+  /* ─── WHATSAPP ─── */
+  .wa-bg{background:#0B141A;}
+  .wa-statusbar{display:flex;justify-content:space-between;padding:5px 10px 2px;background:#0B141A;}
+  .wa-time-txt{font-size:8px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;}
+  .wa-signal{font-size:6px;color:rgba(255,255,255,0.7);letter-spacing:1px;}
+
+  .wa-topbar{
+    background:#1F2C34;padding:6px 8px;
+    display:flex;align-items:center;gap:6px;
+    border-bottom:1px solid rgba(255,255,255,0.04);
+  }
+  .wa-back-arrow{font-size:11px;color:#00A884;font-weight:700;}
+  .wa-ava{
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;flex-shrink:0;
+  }
+  .wa-ava.good-ava{background:linear-gradient(135deg,var(--gold),#B8860B);box-shadow:0 0 0 2px rgba(37,211,102,0.4);}
+  .wa-ava.bad-ava{background:#2A2A2A;color:#444;}
+  .wa-topinfo{flex:1;}
+  .wa-topname{font-size:9px;font-weight:700;color:#E9EDEF;font-family:'Syne',sans-serif;line-height:1.2;}
+  .wa-toponline{font-size:7px;}
+
+  .wa-body{background:#0B141A;padding:10px 8px;}
+  .wa-bigava-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px;}
+  .wa-bigava{
+    width:52px;height:52px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+  }
+  .wa-bigava.good-ava{
+    background:linear-gradient(135deg,var(--gold),#B8860B);
+    box-shadow:0 0 0 3px rgba(37,211,102,0.5),0 0 0 5px rgba(37,211,102,0.15),0 0 16px rgba(37,211,102,0.3);
+  }
+  .wa-bigava.bad-ava{background:#1A1A1A;color:#333;box-shadow:0 0 0 2px #222;}
+  .wa-bigname{font-size:11px;font-weight:800;color:#E9EDEF;font-family:'Syne',sans-serif;text-align:center;}
+  .wa-bigphone{font-size:8px;color:#8696A0;text-align:center;}
+
+  .wa-infocard{
+    background:#1F2C34;border-radius:8px;padding:8px 10px;
+    margin-bottom:6px;
+  }
+  .wa-infolabel{font-size:7px;color:#00A884;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+  .wa-infotext{font-size:8.5px;color:#E9EDEF;line-height:1.5;}
+  .wa-infotext.dim{color:#444;}
+
+  .wa-statuscard{
+    background:#1F2C34;border-radius:8px;padding:7px 10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .wa-statusring{
+    width:30px;height:30px;border-radius:50%;
+    padding:2px;flex-shrink:0;
+  }
+  .wa-statusring.active{background:conic-gradient(var(--wa) 0%,var(--wa) 60%,rgba(37,211,102,0.2) 60%);}
+  .wa-statusring.inactive{background:#2A2A2A;}
+  .wa-statusinner{
+    width:100%;height:100%;border-radius:50%;
+    border:2px solid #0B141A;
+    background:#1F2C34;
+    display:flex;align-items:center;justify-content:center;font-size:11px;
+  }
+  .wa-statusinfo{flex:1;}
+  .wa-statusname{font-size:8px;font-weight:700;color:#E9EDEF;font-family:'Syne',sans-serif;}
+  .wa-statustime{font-size:7px;}
+
+  /* ─── INSTAGRAM ─── */
+  .ig-bg{background:#000;}
+  .ig-statusbar{display:flex;justify-content:space-between;padding:5px 10px 2px;background:#000;}
+  .ig-timetxt{font-size:8px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;}
+  .ig-signal{font-size:6px;color:rgba(255,255,255,0.7);}
+
+  .ig-topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:4px 10px 6px;background:#000;
+    border-bottom:1px solid #111;
+  }
+  .ig-username{font-size:10px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;}
+  .ig-topicons{display:flex;gap:8px;color:#fff;font-size:12px;}
+
+  .ig-profilearea{padding:10px 8px 6px;}
+  .ig-row1{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+  .ig-avaframe{
+    width:50px;height:50px;border-radius:50%;padding:2px;flex-shrink:0;
+  }
+  .ig-avaframe.active-frame{background:var(--ig-grad);}
+  .ig-avaframe.no-frame{background:linear-gradient(135deg,#2A2A2A,#1A1A1A);}
+  .ig-avaborder{
+    width:100%;height:100%;border-radius:50%;
+    border:2.5px solid #000;background:#111;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ig-avaborder.big-emoji{font-size:20px;}
+  .ig-avaborder.small-emoji{font-size:9px;color:#555;}
+
+  .ig-counters{display:flex;flex:1;justify-content:space-around;}
+  .ig-ctr{text-align:center;}
+  .ig-ctrn{font-size:12px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;}
+  .ig-ctrl{font-size:7px;color:#A8A8A8;}
+
+  .ig-namearea{margin-bottom:6px;}
+  .ig-dispname{font-size:9.5px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;margin-bottom:2px;}
+  .ig-biolines{font-size:8px;color:#E0E0E0;line-height:1.55;}
+  .ig-biolines.dim{color:#3A3A3A;}
+  .ig-linkline{display:flex;align-items:center;gap:2px;margin-top:3px;}
+  .ig-linktext{font-size:8px;color:#93C8FF;}
+  .ig-linktext.dim{color:#2A2A2A;}
+
+  .ig-btnrow{display:flex;gap:4px;margin-bottom:6px;}
+  .ig-btn{flex:1;padding:5px;border-radius:6px;font-size:8px;font-weight:700;text-align:center;font-family:'Syne',sans-serif;}
+  .ig-btn.follow{background:var(--ig-grad);color:#fff;}
+  .ig-btn.msg{background:#262626;color:#fff;border:1px solid #363636;}
+  .ig-btn.more{background:#262626;color:#fff;border:1px solid #363636;flex:0;padding:5px 8px;}
+  .ig-btn.follow-dim{background:#1A1A1A;color:#444;border:1px solid #222;}
+
+  .ig-highlights{
+    display:flex;gap:10px;padding:6px 0;
+    border-top:1px solid #1A1A1A;border-bottom:1px solid #1A1A1A;
+    overflow:hidden;
+  }
+  .ig-hl{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .ig-hlring{width:28px;height:28px;border-radius:50%;padding:2px;}
+  .ig-hlring.active-hl{background:var(--ig-grad);}
+  .ig-hlring.dim-hl{background:#1A1A1A;}
+  .ig-hlinner{width:100%;height:100%;border-radius:50%;background:#111;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:11px;}
+  .ig-hllabel{font-size:6.5px;color:#A8A8A8;}
+
+  .ig-gridarea{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;}
+  .ig-gridcell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .ig-gridcell.gold{background:rgba(212,168,67,0.1);}
+  .ig-gridcell.dark{background:#0A0A0A;}
+
+  /* ─── FACEBOOK ─── */
+  .fb-bg{background:#18191A;min-height:240px;}
+  .fb-statusbar{display:flex;justify-content:space-between;padding:5px 10px 2px;background:#18191A;}
+  .fb-timetxt{font-size:8px;font-weight:800;color:#fff;font-family:'Syne',sans-serif;}
+
+  .fb-cover{
+    height:60px;position:relative;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .fb-cover.good-cover{background:linear-gradient(135deg,rgba(212,168,67,0.35),rgba(212,168,67,0.1),rgba(0,0,0,0.3));}
+  .fb-cover.bad-cover{background:linear-gradient(135deg,#111,#0D0D0D);}
+  .fb-covertxt{font-size:7.5px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:2px;color:rgba(212,168,67,0.7);}
+  .fb-covertxt.dim{color:#1A1A1A;}
+
+  .fb-avapos{
+    position:absolute;bottom:-16px;left:8px;
+    width:40px;height:40px;border-radius:50%;
+    border:3px solid #18191A;
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.6);
+  }
+  .fb-avapos.good-ava{background:linear-gradient(135deg,var(--gold),#B8860B);}
+  .fb-avapos.bad-ava{background:#222;color:#444;font-size:9px;}
+
+  .fb-profilebody{padding:22px 8px 6px;}
+  .fb-pname{font-size:12px;font-weight:800;color:#E4E6EB;font-family:'Syne',sans-serif;margin-bottom:2px;}
+  .fb-pname.dim{color:#444;}
+  .fb-pdesc{font-size:8px;color:#B0B3B8;line-height:1.5;margin-bottom:6px;}
+  .fb-pdesc.dim{color:#2A2A2A;}
+  .fb-pfriends{font-size:8px;color:#B0B3B8;margin-bottom:6px;}
+  .fb-pfriends strong{color:#E4E6EB;}
+
+  .fb-pbtnrow{display:flex;gap:4px;margin-bottom:8px;}
+  .fb-pbtn{flex:1;padding:5px;border-radius:6px;font-size:8px;font-weight:700;text-align:center;font-family:'Syne',sans-serif;}
+  .fb-pbtn.add{background:var(--fb);color:#fff;}
+  .fb-pbtn.msg{background:#3A3B3C;color:#E4E6EB;}
+  .fb-pbtn.more{background:#3A3B3C;color:#E4E6EB;flex:0;padding:5px 8px;}
+  .fb-pbtn.add-dim{background:#1A1A1A;color:#333;border:1px solid #222;}
+
+  .fb-infolist{border-top:1px solid #2A2A2B;padding-top:7px;display:flex;flex-direction:column;gap:5px;}
+  .fb-inforow{display:flex;align-items:center;gap:5px;font-size:8px;}
+  .fb-inforow.good-row{color:#E4E6EB;}
+  .fb-inforow.bad-row{color:#2A2A2A;}
+  .fb-infoico{font-size:10px;flex-shrink:0;}
+
+  /* STEP CARDS */
+  .step-list{display:flex;flex-direction:column;gap:16px;}
+  .step-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:all 0.3s ease;position:relative;overflow:hidden;}
+  .step-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;}
+  .step-card:hover{background:rgba(255,255,255,0.04);transform:translateX(3px);}
+  .sec-wa .step-card::before{background:var(--wa);}
+  .sec-ig .step-card::before{background:#dc2743;}
+  .sec-fb .step-card::before{background:var(--fb);}
+  .step-num{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;flex-shrink:0;}
+  .sec-wa .step-num{background:rgba(37,211,102,0.12);color:var(--wa);border:1px solid rgba(37,211,102,0.25);}
+  .sec-ig .step-num{background:rgba(220,39,67,0.1);color:#dc2743;border:1px solid rgba(220,39,67,0.2);}
+  .sec-fb .step-num{background:rgba(24,119,242,0.1);color:var(--fb);border:1px solid rgba(24,119,242,0.2);}
+  .step-content{flex:1;}
+  .step-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--white);margin-bottom:6px;}
+  .step-desc{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:8px;}
+
+  /* COPY BOX */
+  .copy-box{background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;margin-top:10px;}
+  .copy-box-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-bottom:8px;}
+  .copy-text{font-size:13px;color:var(--white);line-height:1.7;font-family:'Lato',sans-serif;margin-bottom:12px;}
+  .copy-text em{color:var(--gold);font-style:normal;}
+  .copy-btn{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid rgba(212,168,67,0.3);border-radius:8px;padding:8px 16px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--gold);cursor:pointer;transition:all 0.25s ease;letter-spacing:1px;text-transform:uppercase;}
+  .copy-btn:hover{background:rgba(212,168,67,0.25);transform:translateY(-1px);}
+  .copy-btn.copied{background:rgba(76,175,130,0.15);color:var(--green);border-color:rgba(76,175,130,0.3);}
+
+  /* AI TIP */
+  .ai-tip{background:linear-gradient(135deg,rgba(155,109,255,0.1),rgba(155,109,255,0.04));border:1px solid rgba(155,109,255,0.25);border-radius:14px;padding:16px 18px;margin-top:12px;display:flex;gap:12px;}
+  .ai-icon{font-size:20px;flex-shrink:0;}
+  .ai-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:6px;}
+  .ai-prompt{background:rgba(0,0,0,0.3);border:1px solid rgba(155,109,255,0.2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--white);font-family:'Lato',sans-serif;line-height:1.6;margin-top:10px;font-style:italic;}
+
+  /* FORMULA */
+  .formula-card{background:linear-gradient(135deg,rgba(212,168,67,0.1),rgba(212,168,67,0.03));border:1px solid rgba(212,168,67,0.25);border-radius:20px;padding:24px;margin:20px 0;position:relative;overflow:hidden;}
+  .formula-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .formula-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+  .formula-parts{display:flex;flex-direction:column;gap:10px;}
+  .formula-part{display:flex;align-items:center;gap:12px;}
+  .formula-num{width:26px;height:26px;border-radius:8px;background:var(--gold-dim);border:1px solid rgba(212,168,67,0.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0;}
+  .formula-text{font-size:13.5px;color:var(--white);line-height:1.5;}
+  .formula-text span{color:var(--gold);font-weight:700;}
+  .formula-arrow{text-align:center;font-size:16px;color:rgba(212,168,67,0.4);margin-left:38px;}
+
+  /* ERRORS */
+  .error-list{display:flex;flex-direction:column;gap:12px;}
+  .error-card{background:rgba(255,107,107,0.05);border:1px solid rgba(255,107,107,0.15);border-radius:14px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start;transition:all 0.3s ease;}
+  .error-card:hover{background:rgba(255,107,107,0.08);transform:translateX(3px);}
+  .error-icon{font-size:20px;flex-shrink:0;}
+  .error-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--rose);margin-bottom:4px;}
+  .error-desc{font-size:13.5px;color:var(--text);line-height:1.7;}
+  .error-desc strong{color:var(--white);}
+
+  /* CHECKLIST */
+  .checklist{display:flex;flex-direction:column;gap:10px;}
+  .check-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;cursor:pointer;transition:all 0.3s ease;user-select:none;}
+  .check-item:hover{background:rgba(255,255,255,0.04);}
+  .check-item.done{background:rgba(76,175,130,0.08);border-color:rgba(76,175,130,0.25);}
+  .check-box{width:22px;height:22px;border-radius:6px;border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s ease;font-size:12px;margin-top:1px;}
+  .check-item.done .check-box{background:var(--green);border-color:var(--green);color:#fff;}
+  .check-label{font-size:14px;color:var(--text);line-height:1.6;flex:1;}
+  .check-item.done .check-label{color:var(--white);}
+  .check-network{font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-left:6px;display:inline-block;}
+  .tag-ig{background:rgba(220,39,67,0.12);color:#dc2743;}
+  .tag-fb{background:rgba(24,119,242,0.1);color:var(--fb);}
+  .tag-wa{background:rgba(37,211,102,0.1);color:var(--wa);}
+  .progress-check{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px 22px;margin-bottom:24px;text-align:center;}
+  .progress-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px;}
+  .progress-bar-wrap{background:rgba(255,255,255,0.06);border-radius:100px;height:8px;overflow:hidden;margin-bottom:8px;}
+  .progress-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width 0.5s ease;box-shadow:0 0 8px rgba(212,168,67,0.4);}
+  .progress-label{font-size:12px;color:var(--gray);font-family:'Syne',sans-serif;}
+  .progress-label span{color:var(--gold);font-weight:700;}
+
+  /* DIVIDER */
+  .divider{display:flex;align-items:center;gap:16px;margin:40px 0;}
+  .divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(212,168,67,0.2),transparent);}
+  .divider-icon{font-size:16px;}
+
+  /* CTA */
+  .cta-bottom{text-align:center;padding:48px 0 20px;}
+  .cta-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);margin-bottom:10px;line-height:1.3;}
+  .cta-title span{background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .cta-sub{font-size:14px;color:var(--gray);margin-bottom:28px;}
+  .cta-btn{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--gold),#C49535);color:#0A0A0A;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:16px 32px;border-radius:100px;cursor:pointer;border:none;box-shadow:0 8px 32px rgba(212,168,67,0.35);transition:all 0.3s ease;text-decoration:none;}
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(212,168,67,0.5);}
+
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  .particle{position:fixed;width:2px;height:2px;border-radius:50%;background:var(--gold);opacity:0;pointer-events:none;z-index:0;animation:floatP var(--dur,9s) ease-in-out var(--delay,0s) infinite;}
+  @keyframes floatP{0%{opacity:0;transform:translateY(100vh);}10%{opacity:0.4;}90%{opacity:0.1;}100%{opacity:0;transform:translateY(-80px);}}
+</style>
+</head>
+<body>
+<div class="progress-strip" id="progressBar"></div>
+<div class="particle" style="left:8%;--dur:10s;--delay:0s;"></div>
+<div class="particle" style="left:35%;--dur:13s;--delay:2s;"></div>
+<div class="particle" style="left:62%;--dur:9s;--delay:1s;"></div>
+<div class="particle" style="left:85%;--dur:11s;--delay:3s;"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="module-badge"><span class="dot"></span> AUREX Academy · Módulo 5 · Paso 1</div>
+  <div class="step-indicator">
+    <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+  </div>
+  <h1 class="hero-title">Tu Perfil es<br><span>tu Vendedor</span></h1>
+  <p class="hero-sub">WhatsApp · Instagram · Facebook</p>
+  <div class="hero-hook">
+    Antes de publicar una sola imagen, antes de mandar un solo mensaje —
+    <strong>tu perfil ya está hablando por ti.</strong> La pregunta es:
+    ¿qué está diciendo? En este paso vas a convertir tus 3 perfiles en
+    vendedores que trabajan las 24 horas, aunque tú estés dormida.
+  </div>
+</section>
+
+<!-- NAV -->
+<nav class="nav-map reveal">
+  <div class="nav-label">Ir directo a una sección</div>
+  <div class="nav-grid">
+    <a class="nav-chip" href="#whatsapp">💬 WhatsApp</a>
+    <a class="nav-chip" href="#instagram">📸 Instagram</a>
+    <a class="nav-chip" href="#facebook">👥 Facebook</a>
+    <a class="nav-chip" href="#errores">🚫 Errores fatales</a>
+    <a class="nav-chip" href="#checklist">✅ Checklist</a>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ══════════════ WHATSAPP ══════════════ -->
+<section class="section-block sec-wa reveal" id="whatsapp">
+  <div class="section-header">
+    <div class="section-icon">💬</div>
+    <div><div class="section-title">WhatsApp</div><div class="section-subtitle">Empieza aquí · Tu audiencia más caliente</div></div>
+  </div>
+  <div class="intro-card">
+    WhatsApp es donde tienes <em>tu audiencia más poderosa</em> guardada. Cada contacto ya confía en ti a algún nivel. <strong>Aquí están tus primeros prospectos.</strong> Y la mayoría de la gente no optimiza su perfil — tú sí, desde hoy.
+  </div>
+
+  <!-- MOCKUP WA -->
+  <div class="mockup-compare reveal">
+    <div class="mockup-col">
+      <div class="mockup-label bad">✗ Perfil que no convence</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="wa-bg">
+            <div class="wa-statusbar"><span class="wa-time-txt">9:41</span><span class="wa-signal">▲●■</span></div>
+            <div class="wa-topbar">
+              <span class="wa-back-arrow" style="color:#8696A0">‹</span>
+              <div class="wa-ava bad-ava">👤</div>
+              <div class="wa-topinfo"><div class="wa-topname" style="color:#555">+52 555 123 4567</div><div class="wa-toponline" style="color:#444">Sin estado</div></div>
+            </div>
+            <div class="wa-body">
+              <div class="wa-bigava-wrap">
+                <div class="wa-bigava bad-ava">👤</div>
+                <div class="wa-bigname" style="color:#555">Sin nombre</div>
+                <div class="wa-bigphone">+52 555 123 4567</div>
+              </div>
+              <div class="wa-infocard">
+                <div class="wa-infolabel" style="color:#444">Info</div>
+                <div class="wa-infotext dim">Hey there! I am using WhatsApp.</div>
+              </div>
+              <div class="wa-statuscard" style="background:#141D22">
+                <div class="wa-statusring inactive"><div class="wa-statusinner" style="color:#333">📷</div></div>
+                <div class="wa-statusinfo"><div class="wa-statusname" style="color:#444">Sin estado</div><div class="wa-statustime" style="color:#333">Hace 3 semanas</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-col">
+      <div class="mockup-label good">✓ Perfil que genera confianza</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="wa-bg">
+            <div class="wa-statusbar"><span class="wa-time-txt">9:41</span><span class="wa-signal">▲●■</span></div>
+            <div class="wa-topbar">
+              <span class="wa-back-arrow">‹</span>
+              <div class="wa-ava good-ava">🌟</div>
+              <div class="wa-topinfo"><div class="wa-topname">Tu Nombre</div><div class="wa-toponline" style="color:#00A884">● En línea</div></div>
+            </div>
+            <div class="wa-body">
+              <div class="wa-bigava-wrap">
+                <div class="wa-bigava good-ava">🌟</div>
+                <div class="wa-bigname">Tu Nombre Completo</div>
+                <div class="wa-bigphone">+52 555 123 4567</div>
+              </div>
+              <div class="wa-infocard">
+                <div class="wa-infolabel">Info</div>
+                <div class="wa-infotext">💰 Líder Digital AUREX<br>Negocios desde el celular 🚀</div>
+              </div>
+              <div class="wa-statuscard">
+                <div class="wa-statusring active"><div class="wa-statusinner">🌟</div></div>
+                <div class="wa-statusinfo"><div class="wa-statusname">Mi estado</div><div class="wa-statustime" style="color:#00A884">Hoy, 8:30 a.m.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-list">
+    <div class="step-card reveal">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Foto de perfil — Tu cara, no un logo</div>
+        <div class="step-desc">En WhatsApp la gente quiere saber con <strong>quién está hablando.</strong> Foto de frente, buena luz, sonrisa natural. La misma que usas en Instagram — consistencia genera confianza.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">✅ SÍ · ❌ NO</div>
+          <div class="copy-text">
+            <em>✅ SÍ:</em> Tu cara visible, fondo limpio, expresión amigable<br>
+            <em>❌ NO:</em> Logo de empresa, foto de pareja, paisaje, selfie borrosa<br>
+            <em>💡 Tip:</em> Misma foto en las 3 redes. Consistencia = credibilidad.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">La Info — Tu mini bio estratégica</div>
+        <div class="step-desc">La sección "Info" aparece cuando alguien ve tu perfil completo. <strong>Muy poca gente la usa con intención.</strong> Tú sí — desde hoy.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">📋 Opciones listas para copiar</div>
+          <div class="copy-text">
+            <em>Opción 1:</em> 💰 Líder Digital AUREX | Negocios desde el celular<br>
+            <em>Opción 2:</em> 🚀 Construyendo libertad financiera | Comunidad AUREX<br>
+            <em>Opción 3:</em> 🌟 Emprendedora digital | Te ayudo a generar ingresos online
+          </div>
+          <button class="copy-btn" onclick="copyText(this,'💰 Líder Digital AUREX | Negocios desde el celular')">📋 Copiar Opción 1</button>
+        </div>
+        <div class="ai-tip">
+          <span class="ai-icon">🤖</span>
+          <div>
+            <div class="ai-label">Pregúntale a ChatGPT</div>
+            <div class="ai-prompt">"Soy [nombre], líder en AUREX, negocios digitales en Latinoamérica. Mi nicho es [mamás/jóvenes/profesionistas]. Escríbeme 3 versiones de Info para WhatsApp, máximo 2 líneas con emojis. Que transmitan credibilidad y generen curiosidad sin sonar a venta directa."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Estados diarios — Tu arma más poderosa</div>
+        <div class="step-desc">Los ven <strong>todos tus contactos</strong> con tu número guardado. Es tu canal de mayor alcance sin pagar nada. Sube 2-3 imágenes del banco AUREX al día.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">📅 Estrategia semanal lista</div>
+          <div class="copy-text">
+            <em>Lunes:</em> Imagen motivacional AUREX + arranque de semana<br>
+            <em>Miércoles:</em> Contenido de valor — tip sobre ingresos digitales<br>
+            <em>Viernes:</em> Prueba social — resultado real del equipo<br>
+            <em>Domingo:</em> Imagen personal + mensaje de cierre de semana<br><br>
+            <em>⏰ Mejores horarios:</em> 8-9am · 1-2pm · 7-9pm
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Privacidad lista para recibir prospectos</div>
+        <div class="step-desc">Configura para que cualquier persona pueda ver tu foto e info. Si está muy cerrada, los prospectos nuevos no confían antes de escribirte.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">⚙️ Configuración en 2 minutos</div>
+          <div class="copy-text">
+            Ajustes → Privacidad:<br>
+            • Foto de perfil → <em>Todos</em><br>
+            • Info → <em>Todos</em><br>
+            • Estado → <em>Mis contactos</em><br>
+            • Confirmación de lectura → <em>Activado</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider reveal"><div class="divider-line"></div><div class="divider-icon">📸</div><div class="divider-line"></div></div>
+
+<!-- ══════════════ INSTAGRAM ══════════════ -->
+<section class="section-block sec-ig reveal" id="instagram">
+  <div class="section-header">
+    <div class="section-icon">📸</div>
+    <div><div class="section-title">Instagram</div><div class="section-subtitle">Tu vitrina principal de marca</div></div>
+  </div>
+  <div class="intro-card">
+    Cuando alguien ve tu Story y le interesa — lo primero que hace es ir a tu perfil. Tienes <em>3 segundos</em> para que decida quedarse o irse. <strong>Aquí te digo exactamente qué necesita ver.</strong>
+  </div>
+
+  <!-- MOCKUP IG -->
+  <div class="mockup-compare reveal">
+    <div class="mockup-col">
+      <div class="mockup-label bad">✗ Perfil que aleja</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="ig-bg">
+            <div class="ig-statusbar"><span class="ig-timetxt">9:41</span><span class="ig-signal">▲●■</span></div>
+            <div class="ig-topbar">
+              <span class="ig-username" style="color:#555">usuario_2847 🔒</span>
+              <div class="ig-topicons"><span>☰</span></div>
+            </div>
+            <div class="ig-profilearea">
+              <div class="ig-row1">
+                <div class="ig-avaframe no-frame"><div class="ig-avaborder small-emoji">👤</div></div>
+                <div class="ig-counters">
+                  <div class="ig-ctr"><div class="ig-ctrn" style="color:#444">8</div><div class="ig-ctrl">posts</div></div>
+                  <div class="ig-ctr"><div class="ig-ctrn" style="color:#444">43</div><div class="ig-ctrl">seguid.</div></div>
+                  <div class="ig-ctr"><div class="ig-ctrn" style="color:#444">201</div><div class="ig-ctrl">sigu.</div></div>
+                </div>
+              </div>
+              <div class="ig-namearea">
+                <div class="ig-dispname" style="color:#444">Sin nombre</div>
+                <div class="ig-biolines dim">Me gusta viajar 🍕🍕🍕</div>
+                <div class="ig-linkline"><span class="ig-linktext dim">Sin link activo</span></div>
+              </div>
+              <div class="ig-btnrow">
+                <div class="ig-btn follow-dim">Seguir</div>
+                <div class="ig-btn msg" style="color:#444">Mensaje</div>
+              </div>
+            </div>
+            <div class="ig-gridarea">
+              <div class="ig-gridcell dark">🤳</div><div class="ig-gridcell dark">🍔</div><div class="ig-gridcell dark">🎉</div>
+              <div class="ig-gridcell dark">😴</div><div class="ig-gridcell dark">📺</div><div class="ig-gridcell dark">🐶</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-col">
+      <div class="mockup-label good">✓ Perfil que convierte</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="ig-bg">
+            <div class="ig-statusbar"><span class="ig-timetxt">9:41</span><span class="ig-signal">▲●■</span></div>
+            <div class="ig-topbar">
+              <span class="ig-username">tunombre.aurex</span>
+              <div class="ig-topicons"><span>⊕</span><span>☰</span></div>
+            </div>
+            <div class="ig-profilearea">
+              <div class="ig-row1">
+                <div class="ig-avaframe active-frame"><div class="ig-avaborder big-emoji">🌟</div></div>
+                <div class="ig-counters">
+                  <div class="ig-ctr"><div class="ig-ctrn">47</div><div class="ig-ctrl">posts</div></div>
+                  <div class="ig-ctr"><div class="ig-ctrn">1.2k</div><div class="ig-ctrl">seguid.</div></div>
+                  <div class="ig-ctr"><div class="ig-ctrn">318</div><div class="ig-ctrl">sigu.</div></div>
+                </div>
+              </div>
+              <div class="ig-namearea">
+                <div class="ig-dispname">Tu Nombre | AUREX 🏆</div>
+                <div class="ig-biolines">💰 Ingresos digitales desde el celular<br>🌎 Comunidad AUREX · México<br>👇 Empieza aquí</div>
+                <div class="ig-linkline"><span style="font-size:8px;">🔗</span><span class="ig-linktext">aurex.com/inicio</span></div>
+              </div>
+              <div class="ig-btnrow">
+                <div class="ig-btn follow">Seguir</div>
+                <div class="ig-btn msg">Mensaje</div>
+                <div class="ig-btn more">⌄</div>
+              </div>
+            </div>
+            <div class="ig-highlights">
+              <div class="ig-hl"><div class="ig-hlring active-hl"><div class="ig-hlinner">💡</div></div><div class="ig-hllabel">Tips</div></div>
+              <div class="ig-hl"><div class="ig-hlring active-hl"><div class="ig-hlinner">🚀</div></div><div class="ig-hllabel">Logros</div></div>
+              <div class="ig-hl"><div class="ig-hlring active-hl"><div class="ig-hlinner">❓</div></div><div class="ig-hllabel">FAQ</div></div>
+              <div class="ig-hl"><div class="ig-hlring active-hl"><div class="ig-hlinner">⭐</div></div><div class="ig-hllabel">AUREX</div></div>
+            </div>
+            <div class="ig-gridarea">
+              <div class="ig-gridcell gold">💡</div><div class="ig-gridcell gold">📱</div><div class="ig-gridcell gold">🚀</div>
+              <div class="ig-gridcell gold">💰</div><div class="ig-gridcell gold">🌟</div><div class="ig-gridcell gold">✅</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-list">
+    <div class="step-card reveal">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Foto de perfil que genera confianza</div>
+        <div class="step-desc">Tu foto es lo primero que ven. <strong>Clara, buena luz, cara visible, sonrisa natural.</strong> Sin filtros exagerados, sin gafas de sol, sin fotos de grupo.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">✅ SÍ · ❌ NO</div>
+          <div class="copy-text">
+            <em>✅ SÍ:</em> Foto de frente, luz natural, fondo limpio, sonrisa<br>
+            <em>✅ SÍ:</em> Ropa que proyecte confianza y profesionalismo<br>
+            <em>❌ NO:</em> Filtros extremos, gafas de sol, fotos de fiesta<br>
+            <em>❌ NO:</em> Logo como foto, foto de mascota o paisaje
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Bio de 3 líneas que convierte</div>
+        <div class="step-desc">Tienes <strong>150 caracteres.</strong> No es para tu historia de vida — es para que el visitante piense: "Esto es para mí."</div>
+        <div class="formula-card">
+          <div class="formula-label">⚡ La fórmula de las 3 líneas</div>
+          <div class="formula-parts">
+            <div class="formula-part"><div class="formula-num">1</div><div class="formula-text"><span>¿A quién ayudas?</span> → Personas que quieren ingresos digitales</div></div>
+            <div class="formula-arrow">↓</div>
+            <div class="formula-part"><div class="formula-num">2</div><div class="formula-text"><span>¿Qué resultado obtienen?</span> → Construyen su negocio desde el celular</div></div>
+            <div class="formula-arrow">↓</div>
+            <div class="formula-part"><div class="formula-num">3</div><div class="formula-text"><span>¿Qué deben hacer?</span> → 👇 Empieza aquí — link en bio</div></div>
+          </div>
+        </div>
+        <div class="copy-box">
+          <div class="copy-box-label">📋 3 ejemplos listos para adaptar</div>
+          <div class="copy-text">
+            <em>Ejemplo 1:</em><br>💰 Ayudo a personas a generar ingresos digitales<br>🌎 Comunidad AUREX · México<br>👇 Quiero saber cómo → link en bio<br><br>
+            <em>Ejemplo 2:</em><br>🚀 Del trabajo tradicional al negocio digital<br>📱 Te enseño a construir libertad financiera<br>✅ Empieza gratis → link abajo<br><br>
+            <em>Ejemplo 3:</em><br>🌟 Mamá emprendedora · Líder digital<br>💡 Ingresos desde casa con sistema probado<br>👇 Únete a mi comunidad
+          </div>
+          <button class="copy-btn" onclick="copyText(this,'💰 Ayudo a personas a generar ingresos digitales\n🌎 Comunidad AUREX · México\n👇 Quiero saber cómo → link en bio')">📋 Copiar Ejemplo 1</button>
+        </div>
+        <div class="ai-tip">
+          <span class="ai-icon">🤖</span>
+          <div>
+            <div class="ai-label">Pregúntale a ChatGPT</div>
+            <div class="ai-prompt">"Soy [nombre], [edad] años, vivo en [ciudad]. Estoy en AUREX, comunidad de negocios digitales. Mi nicho es [mamás/jóvenes/profesionistas]. Escríbeme 3 versiones de bio para Instagram de máximo 150 caracteres con emojis: línea 1 a quién ayudo, línea 2 qué resultado obtienen, línea 3 llamado a la acción."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Link en bio + Cuenta pública</div>
+        <div class="step-desc"><strong>Link en bio:</strong> directo a tu embudo AUREX. En cada Story di: "Link en mi bio." <strong>Cuenta pública:</strong> obligatorio. Si está privada pierdes el 90% de los prospectos.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">⚙️ Pasos en 3 minutos</div>
+          <div class="copy-text">
+            1. Editar perfil → Sitio web → pega tu link de embudo AUREX<br>
+            2. Ajustes → Privacidad → Cuenta privada → <em>Desactivar</em><br>
+            3. Ajustes → Cuenta → Cambiar a cuenta profesional → Creador<br>
+            4. Verifica que el link abre correcto desde tu celular
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider reveal"><div class="divider-line"></div><div class="divider-icon">👥</div><div class="divider-line"></div></div>
+
+<!-- ══════════════ FACEBOOK ══════════════ -->
+<section class="section-block sec-fb reveal" id="facebook">
+  <div class="section-header">
+    <div class="section-icon">👥</div>
+    <div><div class="section-title">Facebook</div><div class="section-subtitle">Tu red de contactos calientes</div></div>
+  </div>
+  <div class="intro-card">
+    Facebook es donde están las personas que <em>ya te conocen.</em> Familiares, amigos, excompañeros. <strong>No lo subestimes — tus primeras ventas probablemente vendrán de aquí.</strong>
+  </div>
+
+  <!-- MOCKUP FB -->
+  <div class="mockup-compare reveal">
+    <div class="mockup-col">
+      <div class="mockup-label bad">✗ Perfil sin impacto</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="fb-bg">
+            <div class="fb-statusbar"><span class="fb-timetxt">9:41</span><span style="font-size:6px;color:rgba(255,255,255,0.6);">▲●■</span></div>
+            <div class="fb-cover bad-cover" style="position:relative;">
+              <span class="fb-covertxt dim">Sin portada</span>
+              <div class="fb-avapos bad-ava">👤</div>
+            </div>
+            <div class="fb-profilebody">
+              <div class="fb-pname dim">Sin nombre claro</div>
+              <div class="fb-pdesc dim">Sin descripción de quién eres</div>
+              <div class="fb-pfriends"><strong style="color:#444">43</strong> amigos</div>
+              <div class="fb-pbtnrow">
+                <div class="fb-pbtn add-dim">Agregar</div>
+                <div class="fb-pbtn msg" style="color:#444">Mensaje</div>
+              </div>
+              <div class="fb-infolist">
+                <div class="fb-inforow bad-row"><span class="fb-infoico">💼</span>Sin trabajo</div>
+                <div class="fb-inforow bad-row"><span class="fb-infoico">🔗</span>Sin sitio web</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-col">
+      <div class="mockup-label good">✓ Perfil profesional</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="fb-bg">
+            <div class="fb-statusbar"><span class="fb-timetxt">9:41</span><span style="font-size:6px;color:rgba(255,255,255,0.6);">▲●■</span></div>
+            <div class="fb-cover good-cover" style="position:relative;">
+              <span class="fb-covertxt">AUREX · NEGOCIOS DIGITALES</span>
+              <div class="fb-avapos good-ava">🌟</div>
+            </div>
+            <div class="fb-profilebody">
+              <div class="fb-pname">Tu Nombre Completo</div>
+              <div class="fb-pdesc">💰 Líder Digital · Ingresos desde el celular</div>
+              <div class="fb-pfriends"><strong>487</strong> amigos · <strong>1.1k</strong> seguidores</div>
+              <div class="fb-pbtnrow">
+                <div class="fb-pbtn add">Agregar</div>
+                <div class="fb-pbtn msg">Mensaje</div>
+                <div class="fb-pbtn more">•••</div>
+              </div>
+              <div class="fb-infolist">
+                <div class="fb-inforow good-row"><span class="fb-infoico">💼</span>Líder Digital · AUREX</div>
+                <div class="fb-inforow good-row"><span class="fb-infoico">📍</span>México</div>
+                <div class="fb-inforow good-row"><span class="fb-infoico">🔗</span>aurex.com/inicio</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-list">
+    <div class="step-card reveal">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Foto, portada e información completa</div>
+        <div class="step-desc">La portada es el primer impacto visual. <strong>Usa una imagen del banco AUREX o crea una en Canva.</strong> La información completa es tu vendedor silencioso.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">📋 Campos que llenar sí o sí</div>
+          <div class="copy-text">
+            <em>Trabajo:</em> Líder Digital · AUREX Community<br>
+            <em>Descripción:</em> Ayudo a personas a construir negocios digitales rentables desde su celular<br>
+            <em>Sitio web:</em> Tu link de embudo AUREX<br>
+            <em>Ciudad actual:</em> Tu ciudad<br>
+            <em>Portada Facebook en Canva:</em> 820 x 312 px
+          </div>
+          <button class="copy-btn" onclick="copyText(this,'Trabajo: Líder Digital · AUREX Community\nDescripción: Ayudo a personas a construir negocios digitales rentables desde su celular')">📋 Copiar texto</button>
+        </div>
+      </div>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Tus 3 primeras publicaciones antes de prospectar</div>
+        <div class="step-desc">Antes de compartir tu oportunidad, <strong>publica estas 3 cosas</strong> para que tu red entienda quién eres hoy — sin vender nada todavía.</div>
+        <div class="copy-box">
+          <div class="copy-box-label">📋 Las 3 publicaciones base</div>
+          <div class="copy-text">
+            <em>Post 1 — Tu porqué:</em><br>"Hace [tiempo] tomé una decisión que cambió mi vida. Decidí apostar por el mundo digital. Hoy formo parte de AUREX…"<br><br>
+            <em>Post 2 — Contenido de valor:</em><br>Imagen del banco AUREX + mensaje que eduque. Sin vender.<br><br>
+            <em>Post 3 — Prueba social:</em><br>Testimonio del equipo o resultado real.
+          </div>
+          <button class="copy-btn" onclick="copyText(this,'Hace [tiempo] tomé una decisión que cambió mi vida. Decidí apostar por el mundo digital. Hoy formo parte de AUREX y esto es lo que estoy construyendo…')">📋 Copiar Post 1</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider reveal"><div class="divider-line"></div><div class="divider-icon">🚫</div><div class="divider-line"></div></div>
+
+<!-- ERRORES -->
+<section class="section-block sec-errores reveal" id="errores">
+  <div class="section-header">
+    <div class="section-icon">🚫</div>
+    <div><div class="section-title">Errores Fatales</div><div class="section-subtitle">Lo que destruye tu credibilidad en 3 segundos</div></div>
+  </div>
+  <div class="intro-card">Antes de empezar a publicar, asegúrate de <strong>no tener ninguno de estos.</strong> Son los errores que hacen que un prospecto llegue a tu perfil y se vaya sin preguntar nada.</div>
+  <div class="error-list">
+    <div class="error-card reveal"><span class="error-icon">🔒</span><div><div class="error-title">Perfil privado en Instagram</div><div class="error-desc">Si está privado, <strong>pierdes el 90% de los prospectos</strong> que llegan por curiosidad. Ponlo en público hoy.</div></div></div>
+    <div class="error-card reveal"><span class="error-icon">📝</span><div><div class="error-title">Bio vacía o sin propósito</div><div class="error-desc">"Viviendo la vida 🌸" no te consigue clientes. Tu bio es <strong>tu primer mensaje de ventas.</strong></div></div></div>
+    <div class="error-card reveal"><span class="error-icon">📢</span><div><div class="error-title">Solo publicar para vender</div><div class="error-desc">El feed lleno de "$$$" y "Únete ya" espanta. <strong>Nadie quiere seguir a un anuncio ambulante.</strong> Regla: 80% valor, 20% invitación.</div></div></div>
+    <div class="error-card reveal"><span class="error-icon">👻</span><div><div class="error-title">Aparecer y desaparecer</div><div class="error-desc">Publicar 10 días y desaparecer 3 semanas destruye tu posicionamiento. <strong>El algoritmo te olvida. Tu audiencia te olvida.</strong></div></div></div>
+    <div class="error-card reveal"><span class="error-icon">🔗</span><div><div class="error-title">Sin link en bio o link roto</div><div class="error-desc">Si no hay link, <strong>la conversación muere ahí.</strong> Verifica tu link cada semana.</div></div></div>
+    <div class="error-card reveal"><span class="error-icon">🤖</span><div><div class="error-title">Cero presencia personal — solo logos</div><div class="error-desc">La gente no compra productos — <strong>compra personas.</strong> Tu historia es tu mejor herramienta de venta.</div></div></div>
+  </div>
+</section>
+
+<div class="divider reveal"><div class="divider-line"></div><div class="divider-icon">✅</div><div class="divider-line"></div></div>
+
+<!-- CHECKLIST -->
+<section class="section-block sec-check reveal" id="checklist">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <div><div class="section-title">Tu Checklist de Vitrina</div><div class="section-subtitle">Marca cada punto antes de empezar a publicar</div></div>
+  </div>
+  <div class="progress-check">
+    <div class="progress-title">Tu vitrina está lista al:</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="checkProgress" style="width:0%"></div></div>
+    <div class="progress-label"><span id="checkCount">0</span> de 14 puntos completados</div>
+  </div>
+  <div class="checklist">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Foto de perfil: cara visible, buena luz, fondo limpio <span class="check-network tag-wa">WA</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Info de WhatsApp con mensaje estratégico activo <span class="check-network tag-wa">WA</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Privacidad configurada para recibir prospectos nuevos <span class="check-network tag-wa">WA</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Primer estado publicado con imagen del banco AUREX <span class="check-network tag-wa">WA</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Foto de perfil profesional actualizada <span class="check-network tag-ig">IG</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Bio de 3 líneas: quién ayudo, resultado, acción <span class="check-network tag-ig">IG</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Link del embudo AUREX activo y verificado en bio <span class="check-network tag-ig">IG</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Cuenta configurada como pública <span class="check-network tag-ig">IG</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Cuenta profesional activada con estadísticas <span class="check-network tag-ig">IG</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Al menos 9 publicaciones en el feed <span class="check-network tag-ig">IG</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Foto de perfil y portada actualizadas <span class="check-network tag-fb">FB</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Sección Información completa con trabajo y link <span class="check-network tag-fb">FB</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">3 publicaciones base publicadas antes de prospectar <span class="check-network tag-fb">FB</span></div></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><div class="check-label">Link del embudo activo y verificado en las 3 redes <span class="check-network tag-wa">WA</span><span class="check-network tag-ig" style="margin-left:4px">IG</span><span class="check-network tag-fb" style="margin-left:4px">FB</span></div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-bottom reveal">
+  <div class="cta-title">Tu vitrina está lista.<br><span>Ahora activa tu audiencia.</span></div>
+  <div class="cta-sub">Siguiente paso: usa el banco de imágenes para conseguir tus primeros prospectos esta semana.</div>
+  <a class="cta-btn" href="aurex-paso2-activa.html">Paso 2: Activa tu audiencia →</a>
+</div>
+
+</main>
+
+<script>
+  window.addEventListener('scroll',()=>{
+    const pct=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+    document.getElementById('progressBar').style.width=pct+'%';
+  });
+  const reveals=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*60);obs.unobserve(e.target);}});
+  },{threshold:0.08});
+  reveals.forEach(el=>obs.observe(el));
+
+  function copyText(btn,text){
+    const fb=()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);};
+    navigator.clipboard?navigator.clipboard.writeText(text).catch(fb):fb();
+    const orig=btn.innerHTML;btn.innerHTML='✅ Copiado';btn.classList.add('copied');
+    setTimeout(()=>{btn.innerHTML=orig;btn.classList.remove('copied');},2000);
+  }
+
+  function toggleCheck(item){
+    item.classList.toggle('done');
+    item.querySelector('.check-box').innerHTML=item.classList.contains('done')?'✓':'';
+    const total=document.querySelectorAll('.check-item').length;
+    const done=document.querySelectorAll('.check-item.done').length;
+    document.getElementById('checkProgress').style.width=Math.round((done/total)*100)+'%';
+    document.getElementById('checkCount').textContent=done;
+  }
+</script>
+</body>
+</html>
